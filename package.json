@@ -4,7 +4,9 @@
   "description": "database for storing user and movie info to communicate with a react client",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js",
+    "dev": "nodemon"
   },
   "keywords": [],
   "author": "Amber Renfro and Robert Lanchsweerdt",
@@ -17,5 +19,16 @@
     "pg": "^8.7.1",
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.6.5"
-  }
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.12"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/robertlanchsweerdt/bluebadge-movie-app-server.git"
+  },
+  "bugs": {
+    "url": "https://github.com/robertlanchsweerdt/bluebadge-movie-app-server/issues"
+  },
+  "homepage": "https://github.com/robertlanchsweerdt/bluebadge-movie-app-server#readme"
 }
