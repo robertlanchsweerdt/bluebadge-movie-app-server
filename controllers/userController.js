@@ -76,15 +76,13 @@ router.post("/login", async (req, res) => {
 
 //Edit Login//
 
-router.put("/update/:username", validateJWT, async (req, res) => {
+router.put("/update", validateJWT, async (req, res) => {
     const {username, password} = req.body;
-    const userName = req.params.username;
     const userId = req.user.id;
     
     const query ={
         where: {
             id: userId,
-            username: userName
         }
     };
 
