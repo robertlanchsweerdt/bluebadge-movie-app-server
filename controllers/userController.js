@@ -2,6 +2,7 @@ const router = require("express").Router();
 const {UserModel} = require("../models");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const { validateJWT } = require("../middleware");
 
 // SIGN UP //
 router.post("/register", async (req, res) => {
@@ -73,5 +74,35 @@ router.post("/login", async (req, res) => {
     }
 });
 
+//Edit Login//
+
+router.put("/update/:username", validateJWT, async (req, res) => {
+    const {username, password} = req.body;
+    const userName = req.params.username;
+    const userId = req.user.id;
+    
+    const query ={
+        where: {
+            id: userId,
+            username: userName
+        }
+    };
+
+    const updatedLogin = {
+        username: username,
+        password: password
+    };
+    
+    try {
+        const update = await UserModel.update(updatedLogin, query);
+        res.status(200).json({
+            update,
+            message: "Information successfully updated!",
+            updatedLogin
+        });
+    } catch (err) {
+        res.status(500).json({error: err});
+    }
+});
 
 module.exports = router;
