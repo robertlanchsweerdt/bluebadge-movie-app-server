@@ -3,13 +3,14 @@ const {UserModel} = require("../models");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const { validateJWT } = require("../middleware");
+const {UniqueConstraintError} = require("sequelize")
 
 // SIGN UP //
 router.post("/register", async (req, res) => {
 const {username, password} = req.body;
 
 try {
-    const User = UserModel.create({
+    const User = await UserModel.create({
         username,
         password: bcrypt.hashSync(password, 15)
     });
@@ -26,10 +27,17 @@ try {
     });
 
 } catch (err) {
-    res.status(500).json({
-        message: "Account creation failed!",
-        error: err
-    });
+    if (err instanceof UniqueConstraintError) {
+        res.status(409).json({
+            message: "Username is taken",
+            error: err
+        })
+    } else {
+        res.status(500).json({
+            message: "Account creation failed!",
+            error: err
+        });
+    }
 }
 });
 
@@ -88,18 +96,36 @@ router.put("/update", validateJWT, async (req, res) => {
 
     const updatedLogin = {
         username: username,
-        password: password
+        password: bcrypt.hashSync(password, 15),
     };
     
     try {
         const update = await UserModel.update(updatedLogin, query);
         res.status(200).json({
-            update,
+            
             message: "Information successfully updated!",
-            updatedLogin
+            updatedLogin,
+            update
         });
     } catch (err) {
         res.status(500).json({error: err});
+    }
+});
+
+//Get Account
+router.get("/mine", validateJWT, async (req, res) => {
+    let userId = req.user.id
+    try {
+        const userAccount = await UserModel.findAll({
+            where: {
+                id: userId
+            }
+        });
+        res.status(200).json(userAccount);
+    } catch  (err) {
+        res.status(500).json({
+            error: err
+        });
     }
 });
 
