@@ -129,4 +129,26 @@ router.get("/mine", validateJWT, async (req, res) => {
     }
 });
 
+//user delete
+
+router.delete("/delete", validateJWT, async (req, res) => {
+    const userId = req.user.id;
+
+    try {
+        const query ={
+            where: {
+                id: userId,
+            }
+        };
+
+        await UserModel.destroy(query);
+        res.status(200).json({
+            
+            message: "Account deleted!",
+        });
+    } catch (err) {
+        res.status(500).json({error: err});
+    }
+});
+
 module.exports = router;
