@@ -13,9 +13,9 @@ router.post('/', validateJWT, async (req, res) => {
   const { id } = req.user;
 
   const addMovie = {
-    user_rating,
-    watched,
-    comments,
+    user_rating: 0,
+    watched: false,
+    comments: '',
     movie,
     owner_id: id,
   };
