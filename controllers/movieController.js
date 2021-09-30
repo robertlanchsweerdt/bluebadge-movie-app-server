@@ -1,5 +1,9 @@
 const router = require('express').Router();
+
+// it is here that the movie model is hooked up to the movieController.  This is important so the controller matches how the data is to be stored in our database (as set by the models using Sequelize).
 const { MovieModel } = require('../models');
+
+// it is here that the validate session is hooked up to the movieController.
 const { validateJWT } = require('../middleware');
 
 /*
@@ -129,7 +133,9 @@ router.put('/:id', validateJWT, async (req, res) => {
 
 // validate session is used to validate that a user has access to something.  The validate session is created in the middleware folder.  For our project, our validate session was created in the file titled validate-jwt.js.
 
-// From there, the validate-jwt.js is passed to the controllers as an object.  For the controllers, in this case the movieController, we can validate that a user has permission to delete a movie.
+// From there, the validate-jwt.js is passed to the controllers as an object (we called it 'validateJWT').  For the controllers, in this case the movieController, we can validate that a user has permission to delete a movie.
+
+// The 'validateJWT' is a parameter within the router that will have access to the validate-jwt.js.  From there, we have access to the 'id' where we can determine if the 'id' is validate and, if so, if it meets the query conditions to further approve access.  In this case, we want to make sure the approved user.id was the same id used to save the movie.  If so, then that user has access to delete.
 
 router.delete('/:id', validateJWT, async (req, res) => {
   const movieId = req.params.id;
