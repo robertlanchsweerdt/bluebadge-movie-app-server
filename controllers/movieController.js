@@ -127,6 +127,10 @@ router.put('/:id', validateJWT, async (req, res) => {
 =========================
 */
 
+// validate session is used to validate that a user has access to something.  The validate session is created in the middleware folder.  For our project, our validate session was created in the file titled validate-jwt.js.
+
+// From there, the validate-jwt.js is passed to the controllers as an object.  For the controllers, in this case the movieController, we can validate that a user has permission to delete a movie.
+
 router.delete('/:id', validateJWT, async (req, res) => {
   const movieId = req.params.id;
   const userId = req.user.id;
